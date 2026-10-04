@@ -19400,6 +19400,8 @@ More exams: https://aniledutech.in
     }
 
 
+    // 2FA (authenticator app) for admin login: false = email + password only.
+    const ADMIN_REQUIRE_2FA = false;
     // ═══ 2FA (TOTP) for admin login — Supabase Auth MFA ═══
     // Password login gives an "aal1" token. Admin must also enter an authenticator-app code → "aal2" token.
     // If MFA is not enabled on the Supabase project, login still works (with a warning) so you can't lock yourself out.
@@ -19444,6 +19446,13 @@ More exams: https://aniledutech.in
         return { ok: true, data: vd };
       } catch (e) { return { err: '❌ Network error' }; }
     }
+    // Supabase returns the QR as an SVG data-URI that contains double quotes → must be URL-encoded before use in src="..."
+    function _qrSrc(q) {
+      q = String(q || '');
+      var m = q.match(/^data:image\/svg\+xml;(?:charset=)?utf-8,([\s\S]*)$/i);
+      if (m) { var svg = m[1]; try { svg = decodeURIComponent(svg); } catch (e) { } return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); }
+      return q.replace(/"/g, '&quot;');
+    }
     // returns: session object (aal2) | 'unavailable' (MFA not enabled on project) | null (cancelled/failed)
     async function _adminMfaStep(tok) {
       var H = { 'Authorization': 'Bearer ' + tok };
@@ -19467,7 +19476,7 @@ More exams: https://aniledutech.in
       if (!er.ok || !ed.id || !ed.totp) return 'unavailable';
       var html = '<div style="font-size:34px">🛡️</div><h3 style="margin:6px 0 4px;font-size:18px">Set up 2-Factor (one time)</h3>' +
         '<p style="font-size:12.5px;color:#6b7396;margin:0 0 8px">Google Authenticator / Authy app లో ఈ QR scan చేసి, వచ్చిన 6-digit code enter చేయండి.</p>' +
-        '<img src="' + ed.totp.qr_code + '" alt="QR" style="width:190px;height:190px;border:1px solid #e6e9f4;border-radius:12px;padding:6px;background:#fff">' +
+        '<img src="' + _qrSrc(ed.totp.qr_code) + '" alt="QR" style="width:190px;height:190px;border:1px solid #e6e9f4;border-radius:12px;padding:6px;background:#fff">' +
         '<div style="font-size:11px;color:#6b7396;margin-top:6px">QR scan కాకపోతే ఈ key manual గా add చేయండి:</div>' +
         '<div style="font-family:monospace;font-size:12px;background:#f3f5fb;border-radius:8px;padding:7px;word-break:break-all;margin-top:4px;user-select:all">' + ed.totp.secret + '</div>';
       return await _mfaAsk(html, 'Verify & Enable', function (c) { return _mfaVerify(ed.id, c, tok); });
@@ -19527,9 +19536,11 @@ More exams: https://aniledutech.in
         return;
       }
 
-      // 2FA: password OK → now require the authenticator code (aal2)
-      const _mfa = await _adminMfaStep(data.access_token);
-      if (_mfa === 'unavailable') {
+      // 2FA is OFF by default (set ADMIN_REQUIRE_2FA = true to turn the authenticator-code step back on)
+      const _mfa = ADMIN_REQUIRE_2FA ? await _adminMfaStep(data.access_token) : 'skip';
+      if (_mfa === 'skip') {
+        // password-only login
+      } else if (_mfa === 'unavailable') {
         toast('⚠️ 2FA enable కాలేదు (Supabase → Authentication → MFA → TOTP ON చేయండి). ప్రస్తుతం password తో మాత్రమే login అయ్యారు.', 'warn');
       } else if (!_mfa) {
         errEl.textContent = '❌ 2FA verify కాలేదు. మళ్ళీ login చేయండి.';
