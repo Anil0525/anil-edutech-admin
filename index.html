@@ -24781,16 +24781,58 @@ Rules:
       <td style="font-weight:900;color:${r.valid ? 'var(--teal)' : 'var(--red)'};">${r.answer}</td>
       <td style="font-size:10px;font-weight:700;color:var(--primary)">${{ reasoning: '🧠', arithmetic: '🔢', ga: '🌍', english: '📖' }[r.section] || '🌍'} ${r.section || 'ga'}</td>
       <td style="font-size:10px;font-weight:700;color:var(--amber,#d97706)">${r.marks ? '⭐' + r.marks : '—'}</td>
-      <td style="font-size:10px;font-weight:700;">${r.image ? `<img loading="lazy" src="${r.image}" style="height:32px;border-radius:4px;border:1px solid var(--border);" onerror="this.replaceWith('❌ URL Error')">` : '—'}</td>
+      <td style="font-size:10px;font-weight:700;">${r.image ? `<img loading="lazy" src="${r.image}" style="height:32px;border-radius:4px;border:1px solid var(--border);" onerror="this.replaceWith('⚠️ Preview load avvaledu (import lo mirror avutundi)')">` : '—'}</td>
       <td style="font-size:10px;font-weight:700;color:${r.valid && r.examExists ? 'var(--teal)' : 'var(--red)'};">${r.valid && r.examExists ? '✅ OK' : !r.examExists ? '❌ Exam?' : '❌ Data'}</td></tr>`;
       }).join('');
       if (_bulkRows.length > 50) tbody.innerHTML += `<tr><td colspan="9" style="text-align:center;font-size:12px;color:var(--text3);padding:8px;">... మరియు ${_bulkRows.length - 50} more rows</td></tr>`;
       document.getElementById('bulk-preview').style.display = 'block';
       document.getElementById('bulk-preview')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    function _confirmBulkImport() {
+    // Copies an external image into our Supabase Storage (via Edge Function
+    // 'mirror-image') so hotlink-blocking / expiring links never break questions.
+    async function _mirrorImage(url) {
+      url = (url || '').trim();
+      if (!url) return { url: '', ok: true };
+      if (url.startsWith(SB_URL)) return { url, ok: true };
+      try {
+        const r = await fetch(`${SB_URL}/functions/v1/mirror-image`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SB_PUBLISHABLE_KEY,
+            'Authorization': 'Bearer ' + SB_PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({ url })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (d && d.ok && d.url) return { url: d.url, ok: true };
+        return { url, ok: false };
+      } catch (e) { return { url, ok: false }; }
+    }
+    async function _mirrorRowImages(rows) {
+      const withImg = rows.filter(r => r.image);
+      let done = 0, failed = 0;
+      for (let i = 0; i < withImg.length; i += 4) {
+        const batch = withImg.slice(i, i + 4);
+        await Promise.all(batch.map(async r => {
+          const m = await _mirrorImage(r.image);
+          r.image = m.url;           // failed → original URL kept (nothing lost)
+          if (!m.ok) failed++;
+          done++;
+        }));
+        toast(`🖼️ Images copy avutunnayi... ${done}/${withImg.length}`, 'info');
+      }
+      return { total: withImg.length, failed };
+    }
+    let _bulkImporting = false;
+    async function _confirmBulkImport() {
+      if (_bulkImporting) return;
       const valid = _bulkRows.filter(r => r.valid && r.examExists);
       if (!valid.length) { toast('❌ Valid rows లేవు', 'error'); return; }
+      _bulkImporting = true;
+      let imgStat = { total: 0, failed: 0 };
+      try { imgStat = await _mirrorRowImages(valid); } catch (e) { }
+      _bulkImporting = false;
       let imported = 0, skipped = 0;
       const newQs = []; // track newly added questions
       valid.forEach(r => {
@@ -24818,7 +24860,9 @@ Rules:
       log.style.display = 'block';
       log.innerHTML = `<div style="color:var(--teal)">✅ ${imported} questions imported!</div>
     ${skipped ? `<div style="color:var(--amber)">⚠️ ${skipped} duplicates skipped</div>` : ''}
-    ${_bulkRows.length - valid.length ? `<div style="color:var(--red)">❌ ${_bulkRows.length - valid.length} invalid rows skipped</div>` : ''}`;
+    ${_bulkRows.length - valid.length ? `<div style="color:var(--red)">❌ ${_bulkRows.length - valid.length} invalid rows skipped</div>` : ''}
+    ${imgStat.total ? `<div style="color:var(--teal)">🖼️ ${imgStat.total - imgStat.failed}/${imgStat.total} images mee storage ki copy ayyayi</div>` : ''}
+    ${imgStat.failed ? `<div style="color:var(--amber)">⚠️ ${imgStat.failed} images copy avvaledu (original URL ne unchanu) — aa questions lo image check cheyyandi</div>` : ''}`;
       document.getElementById('bulk-preview').style.display = 'none';
       _bulkRows = [];
       if (typeof renderQuestionsTable === 'function') renderQuestionsTable();
