@@ -32,7 +32,7 @@
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1A73E8">
-  <title>Free TSPSC, SSC, Banking Mock Tests Telugu | Anil EduTech</title>
+  <title>Anil EduTech Admin</title><meta name="robots" content="noindex,nofollow">
   <meta name="description" content="TSPSC, SSC, Banking, APPSC, RRB పరీక్షలకు తెలుగులో ఉచిత మాక్ టెస్ట్‌లు. 500+ ప్రశ్నలు, లీడర్‌బోర్డ్, సర్టిఫికెట్లు. 100% Free!">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta property="og:title" content="Anil EduTech | Free Mock Tests — TSPSC, SSC, Banking, GK">
@@ -270,6 +270,8 @@
 
 
 <style id="ae-exam-visible-fix">.exam-card.reveal,.exam-card.reveal:not(.visible),#exams-list .exam-card{opacity:1!important;visibility:visible!important}.exam-card.reveal{transform:none}#exams-list{min-height:40px}</style><style id="admin-login-only">
+#_ae_loading,#promo-banner,nav,#aeFloatWrap,#aeCtaFab,#ge-launch-overlay,#pricing-overlay,#sub-overlay,#ssc-inst-overlay{display:none!important}
+.page:not(#page-admin){display:none!important}
 body:not(.admin-active)>*:not(#pw-overlay):not(#ae-toast-wrap):not(script):not(style):not(link):not(meta):not(noscript){display:none!important}
 body:not(.admin-active){background:#0b1020 radial-gradient(circle at 30% 25%,rgba(91,91,240,.28),transparent 55%),radial-gradient(circle at 75% 80%,rgba(139,92,246,.18),transparent 50%)!important;min-height:100vh}
 body:not(.admin-active) #pw-overlay{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
@@ -5038,7 +5040,8 @@ var AE_PUSH={
 window.addEventListener("load",function(){setTimeout(function(){AE_PUSH.sync()},4000)});
 </script>
 <script>
-window.addEventListener("load",function(){setTimeout(function(){try{var p=document.getElementById("page-admin");if(_adminAuthenticated){if(p&&!p.dataset.loaded){fetch("admin-content.html").then(function(r){return r.text()}).then(function(h){p.outerHTML=h;document.getElementById("page-admin").dataset.loaded="1";_afterAdminLoaded()}).catch(function(){p.innerHTML='<div style="text-align:center;padding:60px">\u274C Admin panel load failed. Refresh.</div>'})}else _afterAdminLoaded()}else goAdmin()}catch(e){console.warn("admin boot",e)}},600)});setInterval(function(){try{if(!_adminAuthenticated){var o=document.getElementById("pw-overlay");o&&!o.classList.contains("show")&&o.classList.add("show")}}catch(e){}},800);
+function __adminShow(){showPage("admin"),document.body.classList.add("admin-active");var n=document.getElementById("nav-admin");n&&n.classList.add("active");var l=document.getElementById("admin-logged-label");l&&(l.textContent="\u2705 Logged in as: "+_adminEmail),populateAdminSelects(),saveMockFolders(getMockFolders()),renderAdminTable(),"function"==typeof _renderFreeAccessControl&&_renderFreeAccessControl()}
+window.addEventListener("load",function(){setTimeout(function(){try{var p=document.getElementById("page-admin");if(_adminAuthenticated){if(p&&!p.dataset.loaded){fetch("admin-content.html").then(function(r){return r.text()}).then(function(h){p.outerHTML=h;document.getElementById("page-admin").dataset.loaded="1";__adminShow()}).catch(function(){p.innerHTML='<div style="text-align:center;padding:60px">\u274C Admin panel load failed. Refresh.</div>'})}else __adminShow()}else goAdmin()}catch(e){console.warn("admin boot",e)}},600)});setInterval(function(){try{if(!_adminAuthenticated){var o=document.getElementById("pw-overlay");o&&!o.classList.contains("show")&&o.classList.add("show")}}catch(e){}},800);
 </script>
 </body>
 </html>
