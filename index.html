@@ -269,7 +269,12 @@
 
 
 
-<style id="ae-exam-visible-fix">.exam-card.reveal,.exam-card.reveal:not(.visible),#exams-list .exam-card{opacity:1!important;visibility:visible!important}.exam-card.reveal{transform:none}#exams-list{min-height:40px}</style></head>
+<style id="ae-exam-visible-fix">.exam-card.reveal,.exam-card.reveal:not(.visible),#exams-list .exam-card{opacity:1!important;visibility:visible!important}.exam-card.reveal{transform:none}#exams-list{min-height:40px}</style><style id="admin-login-only">
+body:not(.admin-active)>*:not(#pw-overlay):not(#ae-toast-wrap):not(script):not(style):not(link):not(meta):not(noscript){display:none!important}
+body:not(.admin-active){background:linear-gradient(135deg,#2b2f77,#6d28d9)!important;min-height:100vh}
+body:not(.admin-active) #pw-overlay{background:transparent!important;backdrop-filter:none!important}
+</style>
+</head>
 
 <body>
   <!-- ⚡ INSTANT LOADING SCREEN — inline in body, first paint -->
@@ -5032,7 +5037,7 @@ var AE_PUSH={
 window.addEventListener("load",function(){setTimeout(function(){AE_PUSH.sync()},4000)});
 </script>
 <script>
-window.addEventListener("load",function(){setTimeout(function(){try{var p=document.getElementById("page-admin");if(_adminAuthenticated){if(p&&!p.dataset.loaded){fetch("admin-content.html").then(function(r){return r.text()}).then(function(h){p.outerHTML=h;document.getElementById("page-admin").dataset.loaded="1";_afterAdminLoaded()}).catch(function(){p.innerHTML='<div style="text-align:center;padding:60px">\u274C Admin panel load failed. Refresh.</div>'})}else _afterAdminLoaded()}else goAdmin()}catch(e){console.warn("admin boot",e)}},600)});
+window.addEventListener("load",function(){setTimeout(function(){try{var p=document.getElementById("page-admin");if(_adminAuthenticated){if(p&&!p.dataset.loaded){fetch("admin-content.html").then(function(r){return r.text()}).then(function(h){p.outerHTML=h;document.getElementById("page-admin").dataset.loaded="1";_afterAdminLoaded()}).catch(function(){p.innerHTML='<div style="text-align:center;padding:60px">\u274C Admin panel load failed. Refresh.</div>'})}else _afterAdminLoaded()}else goAdmin()}catch(e){console.warn("admin boot",e)}},600)});setInterval(function(){try{if(!_adminAuthenticated){var o=document.getElementById("pw-overlay");o&&!o.classList.contains("show")&&o.classList.add("show")}}catch(e){}},800);
 </script>
 </body>
 </html>
