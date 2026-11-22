@@ -2149,6 +2149,7 @@
 
               <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
                 <div style="flex:1;min-width:110px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:10px;text-align:center;"><b id="bka-s-n" style="display:block;font-size:20px;color:var(--text);">0</b><span style="font-size:11.5px;color:var(--text3);font-weight:700;">Books</span></div>
+                <div style="flex:1;min-width:110px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:10px;text-align:center;"><b id="bka-s-v" style="display:block;font-size:20px;color:var(--text);">0</b><span style="font-size:11.5px;color:var(--text3);font-weight:700;">Total views 👁</span></div>
                 <div style="flex:1;min-width:110px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:10px;text-align:center;"><b id="bka-s-c" style="display:block;font-size:20px;color:var(--text);">0</b><span style="font-size:11.5px;color:var(--text3);font-weight:700;">Total clicks</span></div>
                 <div style="flex:2;min-width:160px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:10px;text-align:center;"><b id="bka-s-top" style="display:block;font-size:14px;color:var(--text);">-</b><span style="font-size:11.5px;color:var(--text3);font-weight:700;">Top clicked</span></div>
               </div>
@@ -2184,6 +2185,18 @@
                   <button onclick="_bkaReset()" style="padding:12px 16px;background:var(--bg);color:var(--text);border:1.5px solid var(--border);border-radius:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;">Clear</button>
                 </div>
                 <div id="bka-msg" style="display:none;margin-top:10px;font-size:13px;font-weight:700;text-align:center;"></div>
+              </div>
+
+              <div style="background:var(--bg2,rgba(0,0,0,.03));border:1.5px solid var(--border);border-radius:14px;padding:18px;margin-bottom:24px;">
+                <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">📥 Bulk Upload (CSV) — చాలా books ఒకేసారి</div>
+                <p style="font-size:12px;color:var(--text3);margin:0 0 12px;line-height:1.6;">Excel / Google Sheets లో books రాసి <b>CSV (UTF-8)</b> గా save చేయండి. ఒక row = ఒక book. Columns: <b>title, author, exam, category, link, cover_url, price, mrp, note, featured</b> (featured: yes/no). title మరియు link తప్పనిసరి. cover_url ఖాళీగా వదిలితే Amazon link నుండి auto వస్తుంది.</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center;">
+                  <button onclick="_bkaBulkTemplate()" style="padding:9px 14px;background:var(--bg);color:var(--text);border:1.5px solid var(--border);border-radius:10px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;">⬇ Template download</button>
+                  <input id="bka-bulk-file" type="file" accept=".csv,text/csv,text/plain" onchange="_bkaBulkFile(this)" style="font-size:12px;max-width:100%;">
+                </div>
+                <textarea id="bka-bulk-text" rows="5" placeholder="లేదా ఇక్కడ CSV rows paste చేయండి..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:12.5px;background:var(--bg);color:var(--text);box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
+                <button id="bka-bulk-btn" onclick="_bkaBulkImport()" style="margin-top:10px;width:100%;padding:12px;background:linear-gradient(135deg,#059669,#10B981);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;">📥 Import చేయండి</button>
+                <div id="bka-bulk-msg" style="display:none;margin-top:10px;font-size:13px;font-weight:700;text-align:center;"></div>
               </div>
 
               <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;">📚 All Books</div>
