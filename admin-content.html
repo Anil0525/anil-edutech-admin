@@ -2201,6 +2201,13 @@
               </div>
 
               <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;">📚 All Books</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+                <input id="bka-search" type="search" oninput="_bkaRender()" placeholder="🔍 Title / author / exam తో వెతకండి..." style="flex:1;min-width:180px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;background:var(--bg);color:var(--text);font-family:inherit;box-sizing:border-box;">
+                <select id="bka-filter" onchange="_bkaRender()" style="padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;background:var(--bg);color:var(--text);font-family:inherit;">
+                  <option value="all">All</option><option value="noimg">🖼 Image లేనివి</option><option value="hidden">🙈 Hidden</option><option value="top">⭐ Top Pick</option>
+                </select>
+                <span id="bka-count" style="font-size:12px;font-weight:700;color:var(--text3);"></span>
+              </div>
               <div id="bka-list"><div style="text-align:center;padding:30px;color:var(--text3);font-size:13px;font-weight:600;">⏳ Loading...</div></div>
             </div><!-- /admin-card -->
           </div><!-- /atab-books -->
