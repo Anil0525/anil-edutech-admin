@@ -2179,6 +2179,7 @@
                 <div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:14px;">
                   <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text);"><input type="checkbox" id="bka-feat"> ⭐ Top Pick</label>
                   <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text);"><input type="checkbox" id="bka-act" checked> Active (site లో కనిపిస్తుంది)</label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text);"><input type="checkbox" id="bka-notify" checked> 🔔 Users కి notification పంపు (కొత్త book కి మాత్రమే)</label>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
                   <button id="bka-save-btn" onclick="adminSaveBook()" style="flex:1;min-width:140px;padding:12px;background:linear-gradient(135deg,#D97706,#F59E0B);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;">💾 Book Save చేయండి</button>
@@ -2196,6 +2197,7 @@
                   <input id="bka-bulk-file" type="file" accept=".csv,text/csv,text/plain" onchange="_bkaBulkFile(this)" style="font-size:12px;max-width:100%;">
                 </div>
                 <textarea id="bka-bulk-text" rows="5" placeholder="లేదా ఇక్కడ CSV rows paste చేయండి..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:12.5px;background:var(--bg);color:var(--text);box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text);margin-top:10px;"><input type="checkbox" id="bka-bulk-notify" checked> 🔔 Import అయ్యాక users కి ఒక notification పంపు</label>
                 <button id="bka-bulk-btn" onclick="_bkaBulkImport()" style="margin-top:10px;width:100%;padding:12px;background:linear-gradient(135deg,#059669,#10B981);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;">📥 Import చేయండి</button>
                 <div id="bka-bulk-msg" style="display:none;margin-top:10px;font-size:13px;font-weight:700;text-align:center;"></div>
               </div>
